@@ -81,13 +81,18 @@ const retrieveLendingReserveInfo = async (_reserve) => {
 
   const totalBorrowed = borrowedAmount.div(WAD);
 
-  const tvl = totalSupply
-    .div(10 ** liquidity.mintDecimals)
-    .multipliedBy(bnTokenPrice);
-
   return {
     name: name,
-    tvl: tvl.dp(3).toNumber(),
+    totalValueLocked: totalSupply
+      .div(10 ** liquidity.mintDecimals)
+      .multipliedBy(bnTokenPrice)
+      .dp(3)
+      .toNumber(),
+    totalValueBorrowed: totalBorrowed
+      .div(10 ** liquidity.mintDecimals)
+      .multipliedBy(bnTokenPrice)
+      .dp(3)
+      .toNumber(),
     tokenUsdPrice: bnTokenPrice.dp(3).toNumber(),
     totalSupply: totalSupply
       .div(10 ** liquidity.mintDecimals)
@@ -97,7 +102,7 @@ const retrieveLendingReserveInfo = async (_reserve) => {
       .div(10 ** liquidity.mintDecimals)
       .dp(10)
       .toNumber(),
-    util: Math.floor((totalBorrowed / totalSupply) * 100),
+    util: (totalBorrowed / totalSupply) * 100,
   };
 };
 
